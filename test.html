@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bootstrap Form Template</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="jq-validation.css"/>
+    <script src="eg-validation.js"></script>
+</head>
+<body>
+
+
+<div class='well'>
+    <form class="form-horizontal" id="form" action="###">
+
+    <div >
+        邮箱:
+          <input type="text" id="email" eg-valid="true" name="email" class="error"  eg-qq="qq不正确" eg-email="邮箱不正确"  eg-position="bottom">
+    </div>
+        <div >
+            身份证
+          <input type="text" id="password" eg-required="必填" eg-valid eg-idCard="身份证不正确" eg-position="bottom" >
+        </div>
+
+                <button type="submit" class="btn">登录</button>
+
+
+
+
+    </form>
+    <div id="email-line"></div>
+</div>
+
+
+<script src="jquery-1.11.3.min.js"></script>
+<script src="eg-validation.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript" charset="utf-8">
+    $(function () {
+        $('#form').validation({isSubmit:false});//自定义form表单的id
+
+
+    })
+
+</script>
+</body>
+</html>
