@@ -189,10 +189,57 @@
 
 
     var validationForm = function(obj) { // 表单验证方法
+        $('input[eg-valid], textarea[eg-valid]', obj).each(function () {
+            var el = $(this);
+            el.focus(function () {
+                if(el.attr("eg-tips")){
+                    if(null == el.data("eg-inline")){
+                        var inline = "";
+                        $.each(this.attributes,function (i, attr) {
+                            if (attr.name.indexOf("-inline") >= 3 && inline.indexOf(attr.value) == -1){
+                                if ("" != inline){
+                                    inline += ",";
+                                }
+                                inline += attr.value;
+                            }
+                        });
+
+                        if("" == inline){
+                            el.data("eg-inline", "!")
+                        }else {
+                            el.data("eg-inline", inline)
+                        }
+                    }
+                    if ("!" != el.data("eg-inline")){
+                       var  eg_inline = $(el.data("eg-inline"));
+                        eg_inline.removeClass('error error-inline warn warn-inline success success-inline tips tips-inline');
+                        eg_inline.html("");
+                    }
+                    el.removeClass('error error-inline warn warn-inline success success-inline tips tips-inline');
+                    el.siblings('[class$="-inline"]').remove();
+                    tips(el, "tips", el.attr("eg-tips"), el.attr("eg-position"))
+                }
+            })
+            el.blur(function () {
+                if("" == el.attr("eg-valid") || "true" ==  el.attr("eg-valid") ){
+                    if (validateField(this)) {
+                        if (wFocus == false) {
+                            scrollTo(0, el[0].offsetTop - 50);
+                            wFocus = true;
+                        }
+
+                    }
+                }
+            });
+        });
+
+
+
+
         $(obj).submit(function() { // 提交时验证
-            /**if (formState) { // 重复提交则返回
+            if (formState) { // 重复提交则返回
                 return false;
-            }**/
+            }
             formState = true;
             var validationError = false;
             $('input[eg-valid], textarea[eg-valid]', this).each(function () {
@@ -217,4 +264,6 @@
 
 
     };
+
+
 }(window.jQuery);
