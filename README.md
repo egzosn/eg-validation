@@ -147,7 +147,7 @@
    
 ```
 
-#### 以下对[eg-inline的使用案例]()  
+#### 以下对eg-inline的使用案例  
 
 ```html
 
@@ -183,4 +183,5 @@ email2 邮箱校验提示在此展示：<div id="eg-email-inline"></div>
 </html>
 
 ```
+
 
