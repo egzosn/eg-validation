@@ -1,47 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Bootstrap Form Template</title>
+    <title>Validation Form Template</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--<link rel="stylesheet" type="text/css" href="jq-validation.css"/>-->
     <script src="jquery-1.11.3.min.js"></script>
     <script src="eg-validation.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
 
-
 <div class='well'>
     <form class="form-horizontal" id="form" action="###">
-
-    <div >
-        邮箱:
-          <input type="text" id="email" eg-valid="true" name="email"  eg-tips="111" eg-qq  eg-success="校验通过" >
-    </div>
-        <div >
-            身份证
-          <input type="text" id="password" eg-required="必填" eg-valid eg-idCard="身份证不正确" eg-position="bottom" >
-        </div>
-
+        <div >QQ:<input type="text" id="email" eg-valid="true" name="email"  eg-tips="请输入QQ号" eg-qq  eg-success="校验通过"  eg-position="right" > </div>
+        <div >邮箱<input type="text"  eg-valid eg-email="正确的邮箱" eg-tips="请输入邮箱"  eg-required  ></div>
         <button type="submit" class="btn">登录</button>
-
-
-
-
     </form>
-    <div id="qq-line"></div>
 </div>
-
-
-
 
 <script type="text/javascript" charset="utf-8">
     $(function () {
-        $('#form').validation({isSubmit:false});//自定义form表单的id
-
-
+        $('#form').validation();
     })
-
 </script>
 </body>
 </html>

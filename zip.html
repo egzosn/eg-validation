@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Validation Form Template</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="jquery-1.11.3.min.js"></script>
+    <script src="eg-validation.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+
+<div id="form">
+    <div >zip:<input type="text" eg-valid="true" eg-zip  eg-success="校验通过"> </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $(function () {
+        //这里增加邮编进行校验
+        $('#form').validation({
+            rules :{'zip':{validate: function(value) {return (/^[1-9][0-9]{5}$/.test(value) || /^.{4,15}$/.test(value));}, defaultMsg: '请输入正确邮编'}}
+        });
+    })
+</script>
+</body>
+</html>
