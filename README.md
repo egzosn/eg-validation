@@ -147,7 +147,7 @@
    
 ```
 
-#### 以下对eg-inline的使用案例
+#### 以下对[eg-inline的使用案例]()  
 
 ```html
 
@@ -184,4 +184,35 @@ email2 邮箱校验提示在此展示：<div id="eg-email-inline"></div>
 
 ```
 
+<iframe>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Validation inline Form Template</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://www.egzosncom/js/jquery-1.11.3.min.js"></script>
+    <script src="http://www.egzosncom/js/eg-validation.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div id="form">
+    <div >email1:<input type="text" eg-valid="true" eg-email=""  eg-required  eg-success="校验通过" eg-inline="#eg-inline"> </div>
+    <div >email2:<input type="text" eg-valid="true" eg-email  eg-required  eg-email-inline="#eg-email-inline"> </div>
+</div>
+<br/>
+email1 所有校验提示在此展示：<div id="eg-inline"></div>
+<br/>
+email2 邮箱校验提示在此展示：<div id="eg-email-inline"></div>
+<br/>
 
+<script type="text/javascript" charset="utf-8">
+    $(function () {
+        //这里增加邮编进行校验
+        $('#form').validation({
+            isSubmit: false
+        });
+    })
+</script>
+</body>
+</html>
+</iframe>
