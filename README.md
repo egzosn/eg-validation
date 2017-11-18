@@ -184,7 +184,7 @@ email2 邮箱校验提示在此展示：<div id="eg-email-inline"></div>
 
 ```
 
-<iframe>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -215,4 +215,3 @@ email2 邮箱校验提示在此展示：<div id="eg-email-inline"></div>
 </script>
 </body>
 </html>
-</iframe>
