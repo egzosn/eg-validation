@@ -1,6 +1,7 @@
 
 !function($) {
     $.fn.validation = function(options) {
+        $(document.head).append("<style>.error{border:1px solid #f00;padding:2px;}.error-inline{color:#ff5d5d;margin:05px;}.error-inline::before{content:'x';background-color:#ff5d5d;display:inline-block;width:14px;height:14px;line-height:10px;text-align:center;font-size:12px;border-radius:7px;overflow:hidden;color:#fff;margin-right:5px;}.warn{border:1px solid #ffdc2c;padding:2px;}.warn-inline{color:#ffdc2c;margin:05px;}.warn-inline::before{content:'!';background-color:#ffdc2c;display:inline-block;width:14px;height:14px;line-height:14px;text-align:center;font-size:12px;border-radius:7px;overflow:hidden;color:#fff;margin-right:5px;}.success{border:1px solid #11cd6d;padding:2px;}.success-inline{color:#11cd6d;margin:05px;}.success-inline::before{content:'√';background-color:#11cd6d;display:inline-block;width:14px;height:14px;line-height:14px;text-align:center;font-size:12px;border-radius:7px;overflow:hidden;color:#fff;margin-right:5px;}.tips{border: 1px solid #c6c6c6;padding:2px;}.tips-inline{color:#c6c6c6;margin:05px;}.tips-inline::before{content:'i';background-color:#c6c6c6;display:inline-block;width:14px;height:14px;text-align:center;font-size:12px;border-radius:7px;overflow:hidden;line-height:14px;color:#fff;margin-right:5px;}.inline-left{margin:05px;}.inline-right{margin:05px;position:absolute;}</style>");
         return this.each(function() {
 
             globalOptions = $.extend({}, $.fn.validation.defaults, options);
@@ -18,7 +19,6 @@
             'phone':{ validate: function(value) {return (/^((\(\d{2,3}\))|(\d{3}\-))?1(3|4|5|6|8)\d{9}$/.test(value));}, defaultMsg: '请输入正确手机号码'},
             'password':{ validate: function(value) {return (safePassword(value));}, defaultMsg: '密码由字母和数字组成，至少6位'},
             'equalto':{ validate: function(value,param) { return ((value != $(param).val()));}, defaultMsg: '两次输入的字符不一至'},
-            'idcard':{ validate: function(value) {return (idCard(value));}, defaultMsg: '身份证号码不正确'},
             'chinese':{ validate: function(value) {return (/^[\u4e00-\u9fff]$/.test(value));}, defaultMsg: '请输入汉字'},
             'minlength':{ validate: function(value,param) {return (value.length>=param);}, defaultMsg: '请输入至少{param}位'},
             'mlength':{ validate: function(value,param) {return (value.length<=param);}, defaultMsg: '请输入最多{param}位'},
@@ -31,64 +31,7 @@
     }
 
 
-    /*身份证验证*/
-    var idCard = function (value) {
-        if (value.length == 18 && 18 != value.length) return false;
-        var number = value.toLowerCase();
-        var d, sum = 0, v = '10x98765432', w = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2], a = '11,12,13,14,15,21,22,23,31,32,33,34,35,36,37,41,42,43,44,45,46,50,51,52,53,54,61,62,63,64,65,71,81,82,91';
-        var re = number.match(/^(\d{2})\d{4}(((\d{2})(\d{2})(\d{2})(\d{3}))|((\d{4})(\d{2})(\d{2})(\d{3}[x\d])))$/);
-        if (re == null || a.indexOf(re[1]) < 0) return false;
-        if (re[2].length == 9) {
-            number = number.substr(0, 6) + '19' + number.substr(6);
-            d = ['19' + re[4], re[5], re[6]].join('-');
-        } else d = [re[9], re[10], re[11]].join('-');
-        if (!isDateTime.call(d, 'yyyy-MM-dd')) return false;
-        for (var i = 0; i < 17; i++) sum += number.charAt(i) * w[i];
-        return (re[2].length == 9 || number.charAt(17) == v.charAt(sum % 11));
-    }
-
-    var isDateTime = function (format, reObj) {
-        format = format || 'yyyy-MM-dd';
-        var input = this, o = {}, d = new Date();
-        var f1 = format.split(/[^a-z]+/gi), f2 = input.split(/\D+/g), f3 = format.split(/[a-z]+/gi), f4 = input.split(/\d+/g);
-        var len = f1.length, len1 = f3.length;
-        if (len != f2.length || len1 != f4.length) return false;
-        for (var i = 0; i < len1; i++) if (f3[i] != f4[i]) return false;
-        for (var i = 0; i < len; i++) o[f1[i]] = f2[i];
-        o.yyyy = s(o.yyyy, o.yy, d.getFullYear(), 9999, 4);
-        o.MM = s(o.MM, o.M, d.getMonth() + 1, 12);
-        o.dd = s(o.dd, o.d, d.getDate(), 31);
-        o.hh = s(o.hh, o.h, d.getHours(), 24);
-        o.mm = s(o.mm, o.m, d.getMinutes());
-        o.ss = s(o.ss, o.s, d.getSeconds());
-        o.ms = s(o.ms, o.ms, d.getMilliseconds(), 999, 3);
-        if (o.yyyy + o.MM + o.dd + o.hh + o.mm + o.ss + o.ms < 0) return false;
-        if (o.yyyy < 100) o.yyyy += (o.yyyy > 30 ? 1900 : 2000);
-        d = new Date(o.yyyy, o.MM - 1, o.dd, o.hh, o.mm, o.ss, o.ms);
-        var reVal = d.getFullYear() == o.yyyy && d.getMonth() + 1 == o.MM && d.getDate() == o.dd && d.getHours() == o.hh && d.getMinutes() == o.mm && d.getSeconds() == o.ss && d.getMilliseconds() == o.ms;
-        return reVal && reObj ? d : reVal;
-        function s(s1, s2, s3, s4, s5) {
-            s4 = s4 || 60, s5 = s5 || 2;
-            var reVal = s3;
-            if (s1 != undefined && s1 != '' || !isNaN(s1)) reVal = s1 * 1;
-            if (s2 != undefined && s2 != '' && !isNaN(s2)) reVal = s2 * 1;
-            return (reVal == s1 && s1.length != s5 || reVal > s4) ? -10000 : reVal;
-        }
-    };
-
-
-
-    var getRules = function (field) {
-        var rules = {};
-        $.each(field.attributes,function (i, attr) {
-            // rules[]
-        });
-
-    }
-
-
-    var formState = false, fieldState = false, wFocus = false, globalOptions = {};
-
+    var formState = false,  wFocus = false, globalOptions = {};
 
     /**
      * 位置
@@ -113,7 +56,6 @@
             dom.css("float", "left");
             el.before(dom);
         }
-
     };
 
     /**
@@ -135,11 +77,6 @@
             pos["bottom"](el, dom, offset);
         }
     }
-
-
-
-
-
 
     /**
      *  校验表单字段
@@ -166,11 +103,9 @@
 					line.text("");
 				}
                 if (null != rules[name] && !rule.validate.call(field, el.val(),param)){
-                    errorMsg = (errorMsg == null)?rule.defaultMsg:errorMsg;
+                    errorMsg = (!errorMsg)?rule.defaultMsg:errorMsg;
                     error = true;
-                  
                  	if (inline && (line=$(inline)).length != 0){
-                    
                         line.addClass( "error-inline");
                         line.text(errorMsg);
                     }else {
@@ -178,15 +113,26 @@
                     }
                 }
             }
-
-
         });
-
         return error;
 
 
     };
 
+    var validation = function (el, that) {
+        if("" == el.attr("eg-valid") || "true" ==  el.attr("eg-valid") ){
+            if (validateField(that)) {
+                if (wFocus == false) {
+                    scrollTo(0, el[0].offsetTop - 50);
+                    wFocus = true;
+                }
+                return true;
+            }
+            var successMsg = el.attr("eg-success");
+            tips(el, "success", successMsg ? successMsg : "校验通过", el.attr("eg-position"))
+            return false;
+        }
+    }
 
     var validationForm = function(obj) { // 表单验证方法
         $('input[eg-valid], textarea[eg-valid]', obj).each(function () {
@@ -219,17 +165,13 @@
                     el.siblings('[class$="-inline"]').remove();
                     tips(el, "tips", el.attr("eg-tips"), el.attr("eg-position"))
                 }
-            })
+            });
             el.blur(function () {
-                if("" == el.attr("eg-valid") || "true" ==  el.attr("eg-valid") ){
-                    if (validateField(this)) {
-                        if (wFocus == false) {
-                            scrollTo(0, el[0].offsetTop - 50);
-                            wFocus = true;
-                        }
-
-                    }
-                }
+                validation(el, this);
+            });
+            el.keyup(function () {
+                validation(el, this);
+                formState = false;
             });
         });
 
@@ -243,22 +185,12 @@
             formState = true;
             var validationError = false;
             $('input[eg-valid], textarea[eg-valid]', this).each(function () {
-                var el = $(this);
-                if("" == el.attr("eg-valid") || "true" ==  el.attr("eg-valid") ){
-                    if (validateField(this)) {
-                        if (wFocus == false) {
-                            scrollTo(0, el[0].offsetTop - 50);
-                            wFocus = true;
-                        }
-
-                        validationError = true;
-                    }
+                if (validation($(this), this)){
+                    validationError = true;
                 }
-
             });
 
             return globalOptions.isSubmit && !validationError;
-
 
         });
 
