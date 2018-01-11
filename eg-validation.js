@@ -33,8 +33,17 @@
         isSubmit:true,
         /**
          *  校验完成后回调事件
+         * @param flag 校验是否通过，true校验通过
+         * @param $this 当前对象
+         * @returns {boolean}
          */
-        valiAfter:function ($this) {return true}
+        valiAfter:function (flag, $this) {return true},
+        /**
+         * 校验通过后回调事件
+         * @param $this 当前对象
+         * @returns {boolean}
+         */
+        valiSuccess:function ($this) {return true}
     }
 
 
@@ -83,9 +92,8 @@
 
     /**
      * 规则匹配
-     * @param el
-     * @param attr
-     * @param name
+     * @param el 节点
+     * @param attr 属性
      */
     var matchRules = function (el, attr) {
         var name = attr.name.replace("eg-", "");
@@ -121,7 +129,7 @@
 
     /**
      *  校验表单字段
-     * @param field
+     * @param field 节点
      * @returns {boolean}
      */
     var validateField = function(field) { // 验证字段
@@ -215,9 +223,12 @@
                     validationError = true;
                 }
             });
-
-            globalOptions.valiAfter(this);
-            return globalOptions.isSubmit && !validationError;
+            validationError = !validationError;
+            globalOptions.valiAfter(validationError, this);
+            if (validationError){
+                globalOptions.valiSuccess(this);
+            }
+            return globalOptions.isSubmit && validationError;
         });
     };
 }(window.jQuery);
