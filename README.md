@@ -148,7 +148,65 @@
 </html>
    
 ```
+#### 以下对结合服务端返回错误信息进行定位
+  ```html
 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Validation Form Template</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="jquery-1.11.3.min.js"></script>
+    <script src="eg-validation.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+
+<div class='well'>
+    <form class="form-horizontal" id="form" action="###">
+        <div >QQ:<input type="text" eg-valid="true" name="qq" eg-code="101004" eg-tips="请输入QQ号" eg-qq  eg-success="校验通过"  eg-position="right" > </div>
+        <div >邮箱<input type="text"  name="email"eg-code="101005" eg-valid eg-email="正确的邮箱" eg-tips="请输入邮箱"  eg-required  ></div>
+        <button type="submit" class="btn">登录</button>
+    </form>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $(function () {
+        $('#form').validation({
+            isSubmit:false,
+            valiSuccess:function () {
+                $.ajax({
+                    type:"post",
+                    data: $('#form').serialize(),
+                    url:"login.json",
+                    dataType:"json",
+                    success:function(data){
+                        if (data.code == 0){
+                            alert("登录成功");
+                            return;
+                        }
+                       var egCode =  $('[eg-code="'+data.code+'"]');
+                        if (egCode.length != 0){
+                            $('[eg-code="'+data.code+'"]').toTips(data.message);
+                            return;
+                        }
+                        alert("登录失败");
+                    }
+                });
+            }
+        });
+    })
+</script>
+</body>
+</html>
+
+```
+> 效果图
+![image](https://github.com/egzosn/eg-validation/blob/master/20180929152810.png?raw=true)
+
+<br/>
+  
+  
 #### 以下对eg-inline的使用案例  
 
 ```html
@@ -185,5 +243,9 @@ email2 邮箱校验提示在此展示：<div id="eg-email-inline"></div>
 </html>
 
 ```
+
+
+
+
 
 

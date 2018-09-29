@@ -1,4 +1,30 @@
 !function($) {
+
+
+    /**
+     * 规则匹配
+     * @param el 节点
+     * @param attr 属性
+     */
+    $.fn.toTips= function (errorMsg) {
+        var el = $(this);
+        var  inline = el.attr("eg-inline");
+        var  line = null;
+        if (inline && (line=$(inline)).length != 0){
+            line.removeClass('error error-inline warn warn-inline success success-inline tips tips-inline');
+            line.text("");
+        }
+        if (inline && (line=$(inline)).length != 0){
+            line.addClass( "error-inline");
+            line.text(errorMsg);
+        }else {
+            el.siblings('[class$="-inline"]').remove();
+            tips(el, "error", errorMsg, el.attr("eg-position"))
+        }
+    }
+
+
+
     $.fn.validation = function(options) {
         $(document.head).append("<style>.error{border:1px solid #f00;padding:2px;}.error-inline{color:#ff5d5d;margin:05px;}.error-inline::before{content:'x';background-color:#ff5d5d;display:inline-block;width:14px;height:14px;line-height:10px;text-align:center;font-size:12px;border-radius:7px;overflow:hidden;color:#fff;margin-right:5px;}.warn{border:1px solid #ffdc2c;padding:2px;}.warn-inline{color:#ffdc2c;margin:05px;}.warn-inline::before{content:'!';background-color:#ffdc2c;display:inline-block;width:14px;height:14px;line-height:14px;text-align:center;font-size:12px;border-radius:7px;overflow:hidden;color:#fff;margin-right:5px;}.success{border:1px solid #11cd6d;padding:2px;}.success-inline{color:#11cd6d;margin:05px;}.success-inline::before{content:'√';background-color:#11cd6d;display:inline-block;width:14px;height:14px;line-height:14px;text-align:center;font-size:12px;border-radius:7px;overflow:hidden;color:#fff;margin-right:5px;}.tips{border: 1px solid #c6c6c6;padding:2px;}.tips-inline{color:#c6c6c6;margin:05px;}.tips-inline::before{content:'i';background-color:#c6c6c6;display:inline-block;width:14px;height:14px;text-align:center;font-size:12px;border-radius:7px;overflow:hidden;line-height:14px;color:#fff;margin-right:5px;}.inline-left{margin:05px;}.inline-right{margin:05px;position:absolute;}</style>");
         return this.each(function() {
@@ -126,6 +152,7 @@
         }
         return false;
     }
+
 
     /**
      *  校验表单字段
